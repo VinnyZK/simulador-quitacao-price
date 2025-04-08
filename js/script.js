@@ -58,45 +58,66 @@ async function simular() {
   // Calcular parcela fixa pelo sistema Price
   const parcelaFixa = (valorFinanciado * jurosMensal) / (1 - Math.pow(1 + jurosMensal, -totalParcelas));
 
-  let parcelasRestantes = Array.from({ length: totalParcelas }, (_, i) => i + 1);
+  let saldoDevedor = valorFinanciado;
   let mes = 1;
   dadosMensais = [];
 
-  while (parcelasRestantes.length > 0) {
-    let parcelasPagas = [];
-    let totalPagoMes = 0;
+  let primeiraParcela = 1;
+  let ultimaParcela = totalParcelas;
 
-    if (parcelasRestantes.length > 0) {
-      let atual = parcelasRestantes.shift();
-      parcelasPagas.push(atual);
+  if (parcelasPorMes === 1) {
+    // Simulação padrão Tabela Price, sem antecipação
+    while (primeiraParcela <= totalParcelas) {
+      const jurosAtual = saldoDevedor * jurosMensal;
+      const amortizacaoAtual = parcelaFixa - jurosAtual;
+      saldoDevedor -= amortizacaoAtual;
+
+      const totalPagoMes = parcelaFixa;
+      const valorEuro = totalPagoMes * cotacaoEuro;
+
+      dadosMensais.push({
+        mes: dadosMensais.length + 1,
+        totalPagoMes,
+        valorEuro,
+        valorPorPessoa: valorEuro / 4,
+      });
+
+      primeiraParcela++;
     }
+  } else {
+    // Simulação com antecipação das últimas (parcelasPorMes - 1) parcelas
+    while (primeiraParcela <= ultimaParcela) {
+      let totalPagoMes = 0;
 
-    for (
-      let i = 0;
-      i < parcelasPorMes - 1 && parcelasRestantes.length > 0;
-      i++
-    ) {
-      let ultima = parcelasRestantes.pop();
-      parcelasPagas.push(ultima);
+      // Pagar a parcela do mês vigente (parcela "primeiraParcela")
+      const jurosAtual = saldoDevedor * jurosMensal;
+      const amortizacaoAtual = parcelaFixa - jurosAtual;
+      saldoDevedor -= amortizacaoAtual;
+      totalPagoMes += parcelaFixa;
+
+      // Pagar antecipadamente as últimas (parcelasPorMes - 1) parcelas pendentes
+      for (let k = 1; k < parcelasPorMes; k++) {
+        if (ultimaParcela > primeiraParcela) {
+          const n = ultimaParcela - primeiraParcela; // número de meses de antecipação
+          const valorPresente = parcelaFixa / Math.pow(1 + jurosMensal, n);
+
+          // O valor presente da última parcela é suficiente para quitá-la hoje, sem afetar o saldo devedor atual
+          totalPagoMes += valorPresente;
+
+          ultimaParcela--;
+        }
+      }
+
+      const valorEuro = totalPagoMes * cotacaoEuro;
+      dadosMensais.push({
+        mes: dadosMensais.length + 1,
+        totalPagoMes,
+        valorEuro,
+        valorPorPessoa: valorEuro / 4,
+      });
+
+      primeiraParcela++;
     }
-
-    for (let numero of parcelasPagas) {
-      let antecipacao = numero - mes;
-      let valor =
-        antecipacao > 0
-          ? parcelaFixa / Math.pow(1 + jurosMensal, antecipacao)
-          : parcelaFixa;
-      totalPagoMes += valor;
-    }
-
-    const valorEuro = totalPagoMes * cotacaoEuro;
-    dadosMensais.push({
-      mes,
-      totalPagoMes,
-      valorEuro,
-      valorPorPessoa: valorEuro / 4,
-    });
-    mes++;
   }
 
   mostrarResultados(dadosMensais, valorFinanciado, totalParcelas, parcelaFixa);
@@ -181,6 +202,24 @@ function mostrarResultados(dados, valorFinanciado, totalParcelas, parcelaFixa) {
 }
 
 simular();
+
+// Atualizar simulação automaticamente ao alterar os campos
+const campos = [
+  "valorEmprestimo",
+  "taxaJuros",
+  "tipoTaxa",
+  "prazo",
+  "tipoPrazo",
+  "parcelasPorMes"
+];
+
+campos.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener("input", simular);
+    el.addEventListener("change", simular);
+  }
+});
 
 function baixarExcel() {
   const wb = XLSX.utils.book_new();
