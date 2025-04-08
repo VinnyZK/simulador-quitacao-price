@@ -1,7 +1,3 @@
-const parcelaFixa = 3677.97;
-const jurosMensal = 0.0155;
-const totalParcelas = 120;
-const valorFinanciado = 200000;
 let dadosMensais = [];
 let cotacaoEuro = 5.5; // valor inicial padrão
 
@@ -35,13 +31,34 @@ function valorPresente(n, valor) {
 
 async function simular() {
   await buscarCotacaoEuro();
-  const parcelasPorMes = parseInt(
-    document.getElementById("parcelasPorMes").value
-  );
-  let parcelasRestantes = Array.from(
-    { length: totalParcelas },
-    (_, i) => i + 1
-  );
+
+  const valorFinanciado = parseFloat(document.getElementById("valorEmprestimo").value);
+  const taxa = parseFloat(document.getElementById("taxaJuros").value) / 100;
+  const tipoTaxa = document.getElementById("tipoTaxa").value;
+  const prazoInput = parseInt(document.getElementById("prazo").value);
+  const tipoPrazo = document.getElementById("tipoPrazo").value;
+  const parcelasPorMes = parseInt(document.getElementById("parcelasPorMes").value);
+
+  // Converter taxa para mensal se necessário
+  let jurosMensal;
+  if (tipoTaxa === "anual") {
+    jurosMensal = Math.pow(1 + taxa, 1 / 12) - 1;
+  } else {
+    jurosMensal = taxa;
+  }
+
+  // Converter prazo para meses se necessário
+  let totalParcelas;
+  if (tipoPrazo === "anos") {
+    totalParcelas = prazoInput * 12;
+  } else {
+    totalParcelas = prazoInput;
+  }
+
+  // Calcular parcela fixa pelo sistema Price
+  const parcelaFixa = (valorFinanciado * jurosMensal) / (1 - Math.pow(1 + jurosMensal, -totalParcelas));
+
+  let parcelasRestantes = Array.from({ length: totalParcelas }, (_, i) => i + 1);
   let mes = 1;
   dadosMensais = [];
 
@@ -67,7 +84,7 @@ async function simular() {
       let antecipacao = numero - mes;
       let valor =
         antecipacao > 0
-          ? valorPresente(antecipacao, parcelaFixa)
+          ? parcelaFixa / Math.pow(1 + jurosMensal, antecipacao)
           : parcelaFixa;
       totalPagoMes += valor;
     }
@@ -82,10 +99,10 @@ async function simular() {
     mes++;
   }
 
-  mostrarResultados(dadosMensais);
+  mostrarResultados(dadosMensais, valorFinanciado, totalParcelas, parcelaFixa);
 }
 
-function mostrarResultados(dados) {
+function mostrarResultados(dados, valorFinanciado, totalParcelas, parcelaFixa) {
   const tabela = document.querySelector("#tabelaResultados tbody");
   tabela.innerHTML = "";
   let totalPago = 0;
@@ -142,7 +159,7 @@ function mostrarResultados(dados) {
   window.myChart = new Chart(ctx, {
     type: "pie",
     data: {
-      labels: ["Principal (R$ 200.000)", "Juros Economizados"],
+      labels: ["Principal (R$ " + valorFinanciado.toFixed(2) + ")", "Juros Economizados"],
       datasets: [
         {
           data: [valorFinanciado, economia],
