@@ -23,7 +23,7 @@ Simulador interativo para calcular a quitação antecipada de financiamentos, co
 ## Deploy
 
 Hospedado via **GitHub Pages**:  
-`https://SEU_USUARIO.github.io/simulador-quitacao/`
+`https://SEU_USUARIO.github.io/simulador-quitacao-price/`
 
 ## Autor
 
