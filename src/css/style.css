@@ -1,0 +1,204 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: #333;
+  line-height: 1.6;
+  animation: fadeIn 1s ease-in-out;
+  transition: background-color 0.5s, color 0.5s;
+  position: relative;
+  overflow-x: hidden;
+}
+
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(135deg, #e0f2ff, #cce4ff);
+}
+
+body::before {
+  display: none;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #222;
+  transition: color 0.5s;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2rem;
+  color: #222;
+  transition: color 0.5s;
+}
+
+label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+  transition: color 0.5s;
+}
+
+input[type="number"] {
+  padding: 0.5rem;
+  width: 100%;
+  max-width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+input[type="number"]:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #f0f8ff;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 2rem;
+}
+
+button {
+  padding: 0.6rem 1.4rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.card, #resumo {
+  background: #ffffffcc;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+#resumo p {
+  margin-bottom: 0.5rem;
+}
+
+.grafico-container {
+  max-width: 400px;
+  max-height: 400px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  padding: 1rem;
+  transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+.grafico-container canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+  transition: background-color 0.5s, box-shadow 0.5s;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  text-align: right;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.hidden {
+  display: none;
+}
+
+.ver-mais-btn {
+  display: block;
+  margin: 1rem auto 0;
+  padding: 0.6rem 1.4rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.ver-mais-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .button-group {
+    flex-direction: column;
+  }
+  button {
+    width: 100%;
+  }
+  input[type="number"] {
+    max-width: 100%;
+  }
+}

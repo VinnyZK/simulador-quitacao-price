@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Quitação Antecipada</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div class="container">
+    <header>
+      <h1>📊 Simulador de Quitação Antecipada</h1>
+    </header>
+
+    <div class="card">
+      <label for="parcelasPorMes">💡 Parcelas pagas por mês:</label>
+      <input type="number" id="parcelasPorMes" value="2" min="1" max="10" />
+
+      <div class="button-group">
+        <button onclick="simular()">Simular</button>
+        <button onclick="baixarExcel()">📥 Baixar Excel</button>
+        <button onclick="baixarPDF()">📄 Baixar PDF</button>
+      </div>
+    </div>
+
+    <h2>📈 Resultados</h2>
+    <div id="resumo"></div>
+
+    <div class="grafico-container">
+      <canvas id="graficoEconomia"></canvas>
+    </div>
+
+    <table id="tabelaResultados">
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Total Pago no Mês (R$)</th>
+          <th>Valor em Euro (€)</th>
+          <th>Valor por Pessoa (€)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="js/script.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 40,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#007bff"
+        },
+        "shape": {
+          "type": "circle"
+        },
+        "opacity": {
+          "value": 0.3,
+          "random": true
+        },
+        "size": {
+          "value": 3,
+          "random": true
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#007bff",
+          "opacity": 0.2,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 1,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "repulse"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "repulse": {
+            "distance": 100,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          }
+        }
+      },
+      "retina_detect": true
+    });
+    const options = {
+      bottom: 'unset',
+      right: '20px',
+      left: 'unset',
+      top: '20px',
+      time: '0.3s',
+      mixColor: '#fff',
+      backgroundColor: '#ffffff',
+      buttonColorDark: '#100f2c',
+      buttonColorLight: '#ffffff',
+      saveInCookies: true,
+      label: '🌓',
+      autoMatchOsTheme: true
+    }
+    const darkmode = new Darkmode(options);
+    darkmode.showWidget();
+  </script>
+</body>
+</html>
